@@ -5,7 +5,7 @@
 #include <vector>
 #include <cmath>
 
-using funkcja_t = std::function<float(float,float)>;
+using funkcja_t = std::function<float(std::vector<float>)>;
 using vector_t = std::vector<std::string>;
 using formatery_t = std::map<std::string,funkcja_t>;
 
@@ -14,36 +14,33 @@ void calculate(formatery_t function,vector_t arguments){
 
     auto functionPicked = function[arguments.at(1)];
 
-    //tworzymy stringa z charów
-    basic_string<char> a = arguments.at(2);
-    basic_string<char> b = arguments.at(3);
 
-    string fs = a;
-    string fs2 = b;
-    //zamiana stringa na float
-    float f= stof(fs);
-    float f2 = stof(fs2);
+    vector<float> x;
 
-    cout << functionPicked(f,f2);
+    for(int i = 2 ; i <  arguments.size() ; i++){
+        x.push_back(stof(arguments.at(i)));
+    }
+
+    cout << functionPicked(x);
 }
 int main(int argc, char **argv) {
     using namespace std;
 
-
-    formatery_t formatery;
     map<string,string> lista = {{"add","type add numberA numberB - to add two numbers"},
                                 {"mod","type mod numberA numberB - to get modulo of two numbers"},
                                 {"sin","type sin number - to get solution of sin using this numbers"}};
 
-    formatery["add"] = [](float a, float b) {
-        return a + b;
-    };
-    formatery["mod"] = [](float a, float b){
+    formatery_t formatery;
 
-        return fmod(a,b);
+    formatery["add"] = [](vector<float> x) {
+        return x.at(0) + x.at(1);
     };
-    formatery["sin"] = [](float a,float b){
-        return sin(a);
+    formatery["mod"] = [](vector<float> x){
+
+        return fmod(x.at(0),x.at(1));
+    };
+    formatery["sin"] = [](vector<float> x){
+        return sin(x.at(0));
     };
 
     try {
