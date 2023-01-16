@@ -51,16 +51,24 @@ int main()
         cv::aruco::detectMarkers(frame, dictionary, corners, ids, detectorParams);
 
         if (ids.size() == 2) {
+            auto a = corners[0][0].x;
+            auto b = corners[0][0].y;
+            auto c = corners[1][0].x;
+            auto d = corners[1][0].y;
+
+            cv::line(frame,cv::Point(a,b),cv::Point(c,d),cv::Scalar(255,0,0),2);
+
             auto found = corners.at(0);
             auto found2 = corners.at(1);
             auto p = fromPixelsToMm(found2)[0];
             auto r = fromPixelsToMm(found)[0];
             auto distance = sqrt(pow(p.x - r.x, 2) + pow(p.y - r.y, 2));
-            cout << "distance in mm = " << distance << endl;
+            cout << "distance = " << distance << endl;
         }
 
-        cv::aruco::drawDetectedMarkers(frame, corners, ids);
 
+
+        cv::aruco::drawDetectedMarkers(frame, corners, ids);
         imshow("Kamera", frame);
 
         int key = waitKey(1);
